@@ -23,4 +23,10 @@ public class InformationService {
     public Optional<Information> getById(String id) {
         return informationRepository.findById(id);
     }
+
+    public boolean addRecord(Information information) {
+        informationRepository.save(information);
+        informationRepository.flush();
+        return true;
+    }
 }

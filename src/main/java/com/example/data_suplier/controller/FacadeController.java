@@ -5,6 +5,7 @@ import com.example.data_suplier.service.InformationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -31,5 +32,12 @@ public class FacadeController {
     public Information getById(@PathVariable("id") String id) {
         return informationService.getById(id).orElse(null);
         //return informationService.getById(id).orElseGet(Information::new);
+    }
+
+    @PostMapping("/addId/{id}")
+    public boolean add(@PathVariable("id") String id) {
+        Information information = new Information();
+        information.setId(id);
+        return informationService.addRecord(information);
     }
 }
