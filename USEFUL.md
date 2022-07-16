@@ -17,6 +17,10 @@ The following guides illustrate how to use some features concretely:
 
 * [Accessing Data with JPA](https://spring.io/guides/gs/accessing-data-jpa/)
 
+### Spring Boot
+
+https://spring.io/guides/gs/spring-boot/ -- Start & test
+
 ### REST
 
 C:\Users\sligh>curl localhost:8080/info/3 -- Return null
