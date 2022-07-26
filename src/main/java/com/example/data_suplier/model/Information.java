@@ -13,7 +13,7 @@ public class Information {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private Long id;
 
     public Information() {
 

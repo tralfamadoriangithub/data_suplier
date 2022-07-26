@@ -21,7 +21,8 @@ public class InformationService {
     }
 
     public Optional<Information> getById(String id) {
-        return informationRepository.findById(id);
+        Long longId = Long.parseLong(id);
+        return informationRepository.findById(longId);
     }
 
     public boolean addRecord(Information information) {

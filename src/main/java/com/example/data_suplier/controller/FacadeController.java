@@ -24,7 +24,7 @@ public class FacadeController {
     }
 
     @GetMapping("/ids")
-    public List<String> getAllIds() {
+    public List<Long> getAllIds() {
         return informationService.getAll().stream().map(Information::getId).collect(toList());
     }
 
@@ -37,7 +37,7 @@ public class FacadeController {
     @PostMapping("/addId/{id}")
     public boolean add(@PathVariable("id") String id) {
         Information information = new Information();
-        information.setId(id);
+        information.setId(Long.parseLong(id));
         return informationService.addRecord(information);
     }
 }

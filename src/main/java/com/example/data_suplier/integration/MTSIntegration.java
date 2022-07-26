@@ -15,6 +15,9 @@ import java.net.URLConnection;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.stream.Stream;
 
@@ -22,10 +25,31 @@ import java.util.stream.Stream;
 @Component
 public class MTSIntegration {
 
-    public String request() throws Throwable{
-        System.out.println("Request 123");
+    public String request() throws Throwable {
+        System.out.println("Request triggered");
         log.log(Level.INFO, "Request log");
 
+        HttpClient httpClient = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(new URI("https://internet.mts.by/"))
+                .headers("Content-Type", "text/plain;charset=UTF-8")
+                .GET()
+                .build();
+
+        HttpResponse<Stream<String>> response = httpClient.send(request, ofLines());
+        Map<String, List<String>> headersMap = response.headers().map();
+        Set<Map.Entry<String, List<String>>> entries = headersMap.entrySet();
+        for (Map.Entry<String, List<String>> entry : entries) {
+            String key = entry.getKey();
+            entry.getValue().forEach(v -> System.out.println(key + ": " + v));
+        }
+
+        response.body().forEach(System.out::println);
+
+        return null;
+    }
+
+    private void draft() throws Throwable {
 
         //https://www.f1news.ru/
         URL url = new URL("https://internet.mts.by/");
@@ -33,26 +57,15 @@ public class MTSIntegration {
         connection.setConnectTimeout(5000);
         connection.setReadTimeout(5000);
         connection.setRequestProperty("Accept", "*/*");
-        connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36");
-
+        connection.setRequestProperty("User-Agent",
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36");
         connection.setRequestMethod("GET");
-
 
         connection.setDoOutput(true);
 
 //        DataOutputStream dataOutputStream = new DataOutputStream(connection.getOutputStream());
 
         int responseCode = connection.getResponseCode();
-
-        HttpClient httpClient = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI("https://internet.mts.by/"))
-                //.header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36")
-                .headers("Content-Type", "text/plain;charset=UTF-8").GET().build();
-
-        HttpResponse<Stream<String>> response = httpClient.send(request, ofLines());
-
-        response.body().forEach(System.out::println);
 
 //        System.out.println("Response code " + responseCode);
 //        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
@@ -63,6 +76,5 @@ public class MTSIntegration {
 //            System.out.println(content.toString());
 //        }
 //        in.close();
-        return null;
     }
 }

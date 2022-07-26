@@ -8,19 +8,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.net.URI;
 
-@RunWith(SpringRunner.class)
+//@RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestInstance(PER_CLASS)
@@ -38,6 +36,7 @@ public class FacadeControllerTest {
     public void fill() throws Exception {
         mvc.perform(MockMvcRequestBuilders.post(URI.create("/addId/1")));
         mvc.perform(MockMvcRequestBuilders.post(URI.create("/addId/2")));
+        mvc.perform(MockMvcRequestBuilders.post(URI.create("/addId/5")));
     }
 
     @Test
@@ -53,8 +52,8 @@ public class FacadeControllerTest {
     @Test
     public void getById() throws Exception {
 
-        String url = "/info/2";
-        String expected = "{\"id\":\"2\"}";
+        String url = "/info/5";
+        String expected = "{\"id\":5}";
 
         getOkByUrl(url).andExpect(content().string(equalTo(expected)));
     }
