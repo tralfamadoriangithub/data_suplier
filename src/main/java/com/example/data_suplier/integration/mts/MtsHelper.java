@@ -1,14 +1,20 @@
 package com.example.data_suplier.integration.mts;
 
 
+import com.example.data_suplier.model.Balance;
 import lombok.NonNull;
 import lombok.extern.java.Log;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 
 import java.net.URI;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.stream.Stream;
+import java.util.List;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Log
 public class MtsHelper {
@@ -22,6 +28,19 @@ public class MtsHelper {
         String form = cutString(string, "<form", "</form>");
         String input = cutString(form, AUTH_TOKEN_INPUT_NAME, "/>");
         return cutStringBetween(input, "value=\"", "\" />");
+    }
+
+    public static String getMtsPortalSessionCookie(HttpResponse<Stream<String>> response) {
+        List<String> cookiesMainPage = response.headers().allValues("set-cookie");
+        return MtsHelper.cutString(cookiesMainPage.get(0), "_mts_portal_session=", ";");
+    }
+
+    public static Balance extractBalance(HttpResponse<Stream<String>> accountInfoResponse) {
+        String collect = accountInfoResponse.body().collect(Collectors.joining());
+        Document document = Jsoup.parse(collect);
+        Element element = document.select("div.payment").first();
+        String value = element.text();
+        return Balance.builder().rawBalance(value).build();
     }
 
     public static HttpRequest createGetRequest(String url) {
@@ -41,12 +60,12 @@ public class MtsHelper {
     }
 
 
-    public static String cutString (String string, String from, String to) {
+    public static String cutString(String string, String from, String to) {
         String substring = string.substring(string.indexOf(from));
         return substring.substring(0, substring.indexOf(to) + to.length());
     }
 
-    private static String cutStringBetween (String string, String from, String to) {
+    private static String cutStringBetween(String string, String from, String to) {
         String substring = string.substring(string.indexOf(from) + from.length());
         return substring.substring(0, substring.indexOf(to));
     }

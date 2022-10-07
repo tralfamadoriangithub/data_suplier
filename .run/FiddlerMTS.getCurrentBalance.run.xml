@@ -1,0 +1,24 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="FiddlerMTS.getCurrentBalance" type="JUnit" factoryName="JUnit">
+    <module name="data_suplier" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="com.example.data_suplier.integration.mts.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <extension name="software.aws.toolkits.jetbrains.core.execution.JavaAwsConnectionExtension">
+      <option name="credential" />
+      <option name="region" />
+      <option name="useCurrentConnection" value="false" />
+    </extension>
+    <option name="PACKAGE_NAME" value="com.example.data_suplier.integration.mts" />
+    <option name="MAIN_CLASS_NAME" value="com.example.data_suplier.integration.mts.MTSIntegrationTest" />
+    <option name="METHOD_NAME" value="getCurrentBalance" />
+    <option name="TEST_OBJECT" value="method" />
+    <option name="VM_PARAMETERS" value="-ea -DproxySet=true -DproxyHost=127.0.0.1 -DproxyPort=8888 -Djavax.net.ssl.trustStore=D:\Project\FiddlerKeystore -Djavax.net.ssl.trustStorePassword=928851" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

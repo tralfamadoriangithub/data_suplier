@@ -43,3 +43,7 @@ https://habr.com/ru/post/578744/
 docker run --name [ContainerName] -e POSTGRES_PASSWORD=[password] -d postgres
 
 docker run --name [ContainerName] -p 5432:5432 -e POSTGRES_PASSWORD=[password] -d postgres
+
+### Parsing
+
+https://jsoup.org/cookbook/
