@@ -52,8 +52,8 @@ public class FacadeControllerTest {
     @Test
     public void getById() throws Exception {
 
-        String url = "/info/5";
-        String expected = "{\"id\":5}";
+        var url = "/info/2";
+        var expected = "{\"id\":2}";
 
         getOkByUrl(url).andExpect(content().string(equalTo(expected)));
     }
@@ -61,8 +61,8 @@ public class FacadeControllerTest {
     @Test
     public void getByUnexistingId() throws Exception {
 
-        String url = "/info/999";
-        String expected = "";
+        var url = "/info/999";
+        var expected = "";
 
         getOkByUrl(url).andExpect(content().string(equalTo(expected)));
     }

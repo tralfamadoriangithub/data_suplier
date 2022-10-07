@@ -1,4 +1,4 @@
-package com.example.data_suplier.integration;
+package com.example.data_suplier.integration.mts;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,7 +14,12 @@ public class MTSIntegrationTest {
     private MTSIntegration integration;
 
     @Test
-    public void requestTest() throws Throwable{
-        integration.request();
+    public void requestMainPageTest() throws Throwable {
+        integration.requestMainPage();
+    }
+
+    @Test
+    public void requestSession() throws Throwable {
+        integration.requestSession();
     }
 }
