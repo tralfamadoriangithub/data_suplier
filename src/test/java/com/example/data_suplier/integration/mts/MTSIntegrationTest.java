@@ -2,6 +2,7 @@ package com.example.data_suplier.integration.mts;
 
 import com.example.data_suplier.model.MtsInformation;
 import com.example.data_suplier.model.User;
+import lombok.extern.java.Log;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -14,9 +15,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.net.URL;
 import java.nio.file.Paths;
+import java.util.logging.Level;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@Log
 public class MTSIntegrationTest {
 
     @Autowired
@@ -30,6 +33,7 @@ public class MTSIntegrationTest {
                 .build();
         MtsInformation currentBalance = integration.getCurrentBalance(user);
         Assert.assertNotNull(currentBalance);
+        log.log(Level.INFO, "Current balance " + currentBalance.getBalance().getRawBalance());
     }
 
     @Test

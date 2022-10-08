@@ -2,7 +2,6 @@ package com.example.data_suplier.integration.mts;
 
 
 import com.example.data_suplier.model.Balance;
-import lombok.NonNull;
 import lombok.extern.java.Log;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -17,29 +16,27 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Log
-public class MtsHelper {
+public class MTSHelper {
 
-    private static final String AUTH_TOKEN_INPUT_NAME = "<input type=\"hidden\" name=\"authenticity_token\"";
+    private static final String AUTH_TOKEN_INPUT_NAME = "input[name=\"authenticity_token\"]";
 
-    public static String getAuthenticityToken(@NonNull HttpResponse<Stream<String>> response) {
-        String string = response.body().filter(s -> s.contains(AUTH_TOKEN_INPUT_NAME))
-                .findFirst()
-                .orElse(null);
-        String form = cutString(string, "<form", "</form>");
-        String input = cutString(form, AUTH_TOKEN_INPUT_NAME, "/>");
-        return cutStringBetween(input, "value=\"", "\" />");
+    public static String getAuthenticityToken(HttpResponse<Stream<String>> mainPageResponse) {
+        String collect = mainPageResponse.body().collect(Collectors.joining());
+        Document document = Jsoup.parse(collect);
+        Element element = document.select(AUTH_TOKEN_INPUT_NAME).first();
+        return element != null ? element.attr("value") : "";
     }
 
     public static String getMtsPortalSessionCookie(HttpResponse<Stream<String>> response) {
         List<String> cookiesMainPage = response.headers().allValues("set-cookie");
-        return MtsHelper.cutString(cookiesMainPage.get(0), "_mts_portal_session=", ";");
+        return MTSHelper.cutString(cookiesMainPage.get(0), "_mts_portal_session=", ";");
     }
 
     public static Balance extractBalance(HttpResponse<Stream<String>> accountInfoResponse) {
         String collect = accountInfoResponse.body().collect(Collectors.joining());
         Document document = Jsoup.parse(collect);
         Element element = document.select("div.payment").first();
-        String value = element.text();
+        String value = element != null ? element.text() : "";
         return Balance.builder().rawBalance(value).build();
     }
 

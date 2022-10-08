@@ -14,7 +14,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.logging.Level;
 import java.util.stream.Stream;
 
-import static com.example.data_suplier.integration.mts.MtsHelper.*;
+import static com.example.data_suplier.integration.mts.MTSHelper.*;
 import static java.net.URLEncoder.encode;
 import static java.net.http.HttpResponse.BodyHandlers.ofLines;
 
@@ -22,12 +22,14 @@ import static java.net.http.HttpResponse.BodyHandlers.ofLines;
 @Component
 public class MTSIntegration {
 
+    private static final String MTS_URL = "https://internet.mts.by/";
+
     public MtsInformation getCurrentBalance(User user) throws Exception {
 
         log.log(Level.INFO, "Request log");
         HttpClient httpClient = HttpClient.newHttpClient();
 
-        HttpRequest mainPageRequest = createGetRequest("https://internet.mts.by/");
+        HttpRequest mainPageRequest = createGetRequest(MTS_URL);
         HttpResponse<Stream<String>> mainPageResponse = processRequest(mainPageRequest, httpClient);
 
         var authenticityToken = getAuthenticityToken(mainPageResponse);
@@ -36,21 +38,21 @@ public class MTSIntegration {
         Thread.sleep(5000);
 
         HttpRequest loginRequest = HttpRequest.newBuilder()
-                .uri(new URI("https://internet.mts.by/session"))
+                .uri(new URI(MTS_URL + "session"))
                 .headers("Content-Type", "application/x-www-form-urlencoded")
                 .header("Cookie", mtsPortalSession)
                 .POST(HttpRequest.BodyPublishers.ofString(
                         "utf8=%E2%9C%93&" +
-                                "authenticity_token=" + encode(authenticityToken, StandardCharsets.UTF_8) +
-                                "&phone_number=" + encode(user.getLogin(), StandardCharsets.UTF_8) +
-                                "&password=" + encode(user.getPassword(), StandardCharsets.UTF_8) +
-                                "&commit=" + encode("Войти", StandardCharsets.UTF_8)))
+                             "authenticity_token=" + encode(authenticityToken, StandardCharsets.UTF_8) +
+                             "&phone_number=" + encode(user.getLogin(), StandardCharsets.UTF_8) +
+                             "&password=" + encode(user.getPassword(), StandardCharsets.UTF_8) +
+                             "&commit=" + encode("Войти", StandardCharsets.UTF_8)))
                 .build();
         HttpResponse<Stream<String>> loginResponse = processRequest(loginRequest, httpClient);
         mtsPortalSession = getMtsPortalSessionCookie(loginResponse);
 
         HttpRequest accountInfoRequest = HttpRequest.newBuilder()
-                .uri(new URI("https://internet.mts.by/"))
+                .uri(new URI(MTS_URL))
                 .headers("Content-Type", "application/x-www-form-urlencoded")
                 .header("Cookie", mtsPortalSession)
                 .GET()

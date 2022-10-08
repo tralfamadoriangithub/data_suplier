@@ -11,7 +11,7 @@ import java.util.logging.Level;
 
 @Service
 @Log
-public class MtsService {
+public class MTSService {
 
     @Autowired
     private MTSIntegration mtsIntegration;
